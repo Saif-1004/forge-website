@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opening Forge…</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #111111;
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .card {
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 32px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 15px;
+      color: #888888;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 15px 24px;
+      background: #ffffff;
+      color: #111111;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      font-family: inherit;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    .countdown {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #555555;
+    }
+
+    #counter { color: #888888; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✓</div>
+    <h1>You're signed in!</h1>
+    <p>Opening Forge now. If it doesn't open automatically, tap the button below.</p>
+
+    <a id="open-btn" class="btn" href="#">
+      Open Forge
+    </a>
+
+    <p class="countdown">Auto-opening in <span id="counter">3</span>s</p>
+  </div>
+
+  <script>
+    // Grab the full URL (including query params / hash) and build the deep link
+    const currentUrl = window.location.href;
+    const deepLink = currentUrl.replace(
+      /^https?:\/\/[^/]+(\/auth-callback)?/,
+      'forge://auth-callback'
+    );
+
+    document.getElementById('open-btn').href = deepLink;
+
+    // Countdown then auto-redirect
+    let seconds = 3;
+    const counter = document.getElementById('counter');
+
+    const tick = setInterval(() => {
+      seconds -= 1;
+      counter.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(tick);
+        window.location.href = deepLink;
+      }
+    }, 1000);
+
+    // If page regains focus (app opened), stop the countdown
+    window.addEventListener('focus', () => clearInterval(tick));
+  </script>
+</body>
+</html>
