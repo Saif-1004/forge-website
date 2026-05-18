@@ -676,9 +676,9 @@
 
     <div class="waitlist-wrap" id="waitlist">
       <div class="waitlist-form" id="wl-form-wrap">
-        <!-- Replace YOUR_FORM_ID with your Formspree form ID -->
-        <form id="wl-form" style="display:contents;" action="https://formspree.io/f/mjgzkbdd" method="POST">
-          <input type="email" name="email" placeholder="Enter your email address" required autocomplete="email" />
+        <form id="wl-form" style="display:contents;" action="https://forgefitnesstracker.us18.list-manage.com/subscribe/post?u=640d29704e52414596d962ddd&amp;id=41f672e1b5&amp;f_id=00f6b2e6f0" method="POST">
+          <input type="email" name="EMAIL" placeholder="Enter your email address" required autocomplete="email" />
+          <div style="position:absolute;left:-5000px;" aria-hidden="true"><input type="text" name="b_640d29704e52414596d962ddd_41f672e1b5" tabindex="-1" value="" /></div>
           <button type="submit" id="wl-btn">Join waitlist</button>
         </form>
       </div>
@@ -867,8 +867,9 @@
 
     <div class="waitlist-wrap" style="margin:0 auto;">
       <div class="waitlist-form" id="wl-form-wrap-2">
-        <form id="wl-form-2" style="display:contents;" action="https://formspree.io/f/mjgzkbdd" method="POST">
-          <input type="email" name="email" placeholder="Your email address" required autocomplete="email" />
+        <form id="wl-form-2" style="display:contents;" action="https://forgefitnesstracker.us18.list-manage.com/subscribe/post?u=640d29704e52414596d962ddd&amp;id=41f672e1b5&amp;f_id=00f6b2e6f0" method="POST">
+          <input type="email" name="EMAIL" placeholder="Your email address" required autocomplete="email" />
+          <div style="position:absolute;left:-5000px;" aria-hidden="true"><input type="text" name="b_640d29704e52414596d962ddd_41f672e1b5" tabindex="-1" value="" /></div>
           <button type="submit" id="wl-btn-2">Join waitlist</button>
         </form>
       </div>
@@ -903,36 +904,19 @@
   </footer>
 
   <script>
-    // Waitlist form handler — works for both forms on the page
+    // Mailchimp doesn't support AJAX cross-origin — submit opens in blank tab.
+    // We show the success state immediately on submit for a smooth UX.
     function setupWaitlistForm(formId, successId) {
       const form = document.getElementById(formId);
       if (!form) return;
       const success = document.getElementById(successId);
-      const btn = form.querySelector('button[type="submit"]');
       const wrap = form.closest('.waitlist-form');
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (btn) { btn.disabled = true; btn.textContent = 'Joining…'; }
+      form.setAttribute('target', '_blank');
 
-        try {
-          const res = await fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { Accept: 'application/json' },
-          });
-
-          if (res.ok) {
-            if (wrap) wrap.style.display = 'none';
-            if (success) { success.style.display = 'flex'; }
-          } else {
-            if (btn) { btn.disabled = false; btn.textContent = 'Join waitlist'; }
-            alert('Something went wrong. Please try again.');
-          }
-        } catch {
-          if (btn) { btn.disabled = false; btn.textContent = 'Join waitlist'; }
-          alert('Something went wrong. Please try again.');
-        }
+      form.addEventListener('submit', () => {
+        if (wrap) wrap.style.display = 'none';
+        if (success) success.style.display = 'flex';
       });
     }
 
