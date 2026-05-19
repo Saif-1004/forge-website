@@ -892,16 +892,17 @@
     <span class="footer-copy">&copy; 2026 Forge Fitness Tracker</span>
   </footer>
 
+  <!-- Hidden iframe absorbs the Mailchimp response so no new tab opens -->
+  <iframe name="wl-sink" style="display:none;" aria-hidden="true"></iframe>
+
   <script>
-    // Mailchimp doesn't support AJAX cross-origin — submit opens in blank tab.
-    // We show the success state immediately on submit for a smooth UX.
     function setupWaitlistForm(formId, successId) {
       const form = document.getElementById(formId);
       if (!form) return;
       const success = document.getElementById(successId);
       const wrap = form.closest('.waitlist-form');
 
-      form.setAttribute('target', '_blank');
+      form.setAttribute('target', 'wl-sink');
 
       form.addEventListener('submit', () => {
         if (wrap) wrap.style.display = 'none';
